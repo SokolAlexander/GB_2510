@@ -1,22 +1,25 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import { Message } from "./components/Message/Message";
+import { Counter } from "./components/Counter/Counter";
+import "./App.css";
 
 function App() {
+  const [text, setText] = useState("i am a prop");
+  const [ligougkl, jghdfjhfjk] = useState({ foo: 1 });
+
+  const handleClick = () => {
+    alert("click");
+    setText("123" + Math.random());
+  };
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+        <Message message={text} onMessageClick={handleClick} />
         <p>
           Edit <code>src/App.js</code> and save to reload.
         </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <Counter />
       </header>
     </div>
   );
