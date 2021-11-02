@@ -1,27 +1,43 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState } from "react";
+import { TextField } from "@mui/material";
+import Button from "@mui/material/Button";
 
-export const Form = () => {
-  const [value, setValue] = useState('');
+import { AUTHORS } from "../../utils/constants";
+
+export const Form = ({ onSendMessage }) => {
+  const [value, setValue] = useState("");
   const inputRef = useRef();
 
   const handleChange = (e) => {
     setValue(e.target.value);
-  }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(value);
+    onSendMessage({
+      text: value,
+      author: AUTHORS.human,
+      id: `mes-${Date.now()}`,
+    });
 
-    const refValue = inputRef.current.value;
-    console.log(refValue);
+    inputRef.current?.focus();
 
-    setValue('');
-  }
+    setValue("");
+  };
 
   return (
     <form onSubmit={handleSubmit}>
-      <input ref={inputRef} type="text" value={value} onChange={handleChange} />
-      <input type="submit" />
+      <TextField
+        id="standard-basic"
+        label="Standard"
+        variant="standard"
+        value={value}
+        onChange={handleChange}
+        inputRef={inputRef}
+      />
+      <Button variant="outlined" type="submit">
+        Send
+      </Button>
     </form>
-  )
-}
+  );
+};

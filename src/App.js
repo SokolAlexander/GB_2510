@@ -1,41 +1,63 @@
-import { useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Message } from "./components/Message/Message";
 import { Counter } from "./components/Counter/Counter";
 import "./App.css";
 import { Form } from "./components/Form/Form";
+import { MessageList } from "./components/MessageList/MessageList";
+import { AUTHORS } from "./utils/constants";
+
+const initialMessages = [
+  {
+    text: "text1",
+    author: AUTHORS.human,
+  },
+];
 
 function App() {
-  const [text, setText] = useState("i am a prop");
-  const [showCounter, setShowCounter] = useState(true);
-  const [messages, setMessages] = useState(["text1", "text2"]);
+  const [messages, setMessages] = useState(initialMessages);
+  const parentRef = useRef();
 
-  const handleClick = () => {
-    alert("click");
-    setText("123" + Math.random());
-  };
+  const handleSendMessage = useCallback((newMessage) => {
+    setMessages((prevMessages) => [...prevMessages, newMessage]);
+  }, []);
 
-  const handleToggleCounter = () => {
-    setShowCounter((prevShow) => !prevShow);
-  };
+  useEffect(() => {
+    if (
+      messages.length &&
+      messages[messages.length - 1].author !== AUTHORS.bot
+    ) {
+      const timeout = setTimeout(
+        () =>
+          handleSendMessage({
+            author: AUTHORS.bot,
+            text: "i am a bot",
+            id: `mes-${Date.now()}`,
+          }),
+        1500
+      );
+
+      return () => clearTimeout(timeout);
+    }
+  }, [messages]);
 
   return (
-    <div className="App">
-      <header className="App-header">
-        {messages.map((mes) => (
-          <div>{mes}</div>
-        ))}
-        <Message message={text} onMessageClick={handleClick} />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <button onClick={handleToggleCounter}>
-          {showCounter ? "hide " : "show "} counter
-        </button>
-        {/* {showCounter && <Counter text={text} />} */}
-        <Form />
-      </header>
+    <div className="App" ref={parentRef}>
+      <div>
+        <h3>List of chats</h3>
+        <ul>
+          <li>Chat 1</li>
+          <li>Chat 2</li>
+          <li>Chat 3</li>
+        </ul>
+      </div>
+      <div>
+        <MessageList messages={messages} />
+        <Form onSendMessage={handleSendMessage} />
+      </div>
     </div>
   );
 }
 
 export default App;
+
+// optional chainging
