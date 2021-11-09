@@ -1,16 +1,18 @@
 import React, { useRef, useState } from "react";
 import { TextField } from "@mui/material";
-import Button from "@mui/material/Button";
+// import Button from "@mui/material/Button";
 
+import { Input } from "../Input";
+import { Button } from "../Button";
 import { AUTHORS } from "../../utils/constants";
 
 export const Form = ({ onSendMessage }) => {
   const [value, setValue] = useState("");
   const inputRef = useRef();
 
-  const handleChange = (e) => {
-    setValue(e.target.value);
-  };
+  // const handleChange = (e) => {
+  //   setValue(e.target.value);
+  // };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -27,17 +29,16 @@ export const Form = ({ onSendMessage }) => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <TextField
-        id="standard-basic"
-        label="Standard"
-        variant="standard"
-        value={value}
-        onChange={handleChange}
-        inputRef={inputRef}
+      <Input
+        render={({ value, handleChange }) => (
+          <TextField value={value} onChange={handleChange} />
+        )}
       />
-      <Button variant="outlined" type="submit">
+
+      {/* <Button variant="outlined" type="submit">
         Send
-      </Button>
+      </Button> */}
+      <Button onPress={handleSubmit} draw={(text) => <h2>Send {text}</h2>} />
     </form>
   );
 };
