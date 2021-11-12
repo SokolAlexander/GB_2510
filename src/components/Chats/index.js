@@ -14,26 +14,9 @@ import {
   useRoutes,
 } from "react-router";
 
-const initialMessages = {
-  chat1: [
-    {
-      text: "text1",
-      author: AUTHORS.human,
-    },
-  ],
-  chat2: [
-    {
-      text: "this is chat2",
-      author: AUTHORS.human,
-    },
-  ],
-  chat3: [],
-};
-
-function Chats() {
+function Chats({ chatList, messages, setMessages }) {
   const { chatId } = useParams();
 
-  const [messages, setMessages] = useState(initialMessages);
   const parentRef = useRef();
 
   const handleSendMessage = useCallback(
@@ -71,7 +54,7 @@ function Chats() {
 
   return (
     <div className="App" ref={parentRef}>
-      <ChatList />
+      <ChatList color="black" chatList={chatList} />
       <div>
         <Button draw={(text) => <span>{text}</span>} />
         <MessageList messages={messages[chatId]} />
