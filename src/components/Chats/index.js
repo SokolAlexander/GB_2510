@@ -14,7 +14,7 @@ import {
   useRoutes,
 } from "react-router";
 
-function Chats({ chatList, messages, setMessages }) {
+function Chats({ chatList, messages, setMessages, onDeleteChat, onAddChat }) {
   const { chatId } = useParams();
 
   const parentRef = useRef();
@@ -54,7 +54,11 @@ function Chats({ chatList, messages, setMessages }) {
 
   return (
     <div className="App" ref={parentRef}>
-      <ChatList color="black" chatList={chatList} />
+      <ChatList
+        chatList={chatList}
+        onAddChat={onAddChat}
+        onDeleteChat={onDeleteChat}
+      />
       <div>
         <Button draw={(text) => <span>{text}</span>} />
         <MessageList messages={messages[chatId]} />

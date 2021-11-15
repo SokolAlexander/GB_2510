@@ -2,8 +2,6 @@ import React, { useRef, useState } from "react";
 import { TextField } from "@mui/material";
 import Button from "@mui/material/Button";
 
-import { Input } from "../Input";
-// import { Button } from "../Button";
 import { AUTHORS } from "../../utils/constants";
 
 export const Form = ({ onSendMessage }) => {
@@ -34,7 +32,6 @@ export const Form = ({ onSendMessage }) => {
       <Button variant="outlined" type="submit">
         Send
       </Button>
-      {/* <Button onPress={handleSubmit} draw={(text) => <h2>Send {text}</h2>} /> */}
     </form>
   );
 };

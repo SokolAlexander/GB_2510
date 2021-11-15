@@ -1,11 +1,10 @@
 import React, { useCallback, useState } from "react";
 import { BrowserRouter, Link, Routes, Route } from "react-router-dom";
 import { Provider } from "react-redux";
-import ChatList from "./components/ChatList";
+import { ChatList } from "./components/ChatList";
 import Chats from "./components/Chats";
 import { Home } from "./components/Home";
 import { AUTHORS } from "./utils/constants";
-import { ThemeContext } from "./utils/ThemeContext";
 import { store } from "./store";
 import { Profile } from "./components/Profile";
 
@@ -29,29 +28,46 @@ const initialMessages = {
     {
       text: "text1",
       author: AUTHORS.human,
+      id: "mes1",
     },
   ],
   chat2: [
     {
       text: "this is chat2",
       author: AUTHORS.human,
+      id: "mes2",
     },
   ],
   chat3: [],
 };
 
 export const App = () => {
-  const [color, setColor] = useState("blue");
-
   const [chatList, setChatList] = useState(initialChatList);
   const [messages, setMessages] = useState(initialMessages);
 
-  const handleToggleColor = useCallback(() => {
-    setColor((prevColor) => (prevColor === "blue" ? "red" : "blue"));
+  const handleAddChat = useCallback((name) => {
+    const newId = `chat${Date.now()}`;
+
+    setChatList((prevChatList) => [...prevChatList, { name, id: newId }]);
+    setMessages((prevMessages) => ({
+      ...prevMessages,
+      [newId]: [],
+    }));
+  }, []);
+
+  const handleDeleteChat = useCallback((idToDelete) => {
+    setChatList((prevChatList) =>
+      prevChatList.filter(({ id }) => id !== idToDelete)
+    );
+    setMessages((prevMessages) => {
+      const newMessages = { ...prevMessages };
+      delete newMessages[idToDelete];
+
+      return newMessages;
+    });
   }, []);
 
   return (
-    // <ThemeContext.Provider value={{ color, handleToggleColor }}>
     <Provider store={store}>
       <BrowserRouter>
         <ul>
@@ -70,7 +86,16 @@ export const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="profile" element={<Profile />} />
           <Route path="chats">
-            <Route index element={<ChatList chatList={chatList} />} />
+            <Route
+              index
+              element={
+                <ChatList
+                  onAddChat={handleAddChat}
+                  onDeleteChat={handleDeleteChat}
+                  chatList={chatList}
+                />
+              }
+            />
             <Route
               path=":chatId"
               element={
@@ -78,6 +103,8 @@ export const App = () => {
                   chatList={chatList}
                   messages={messages}
                   setMessages={setMessages}
+                  onAddChat={handleAddChat}
+                  onDeleteChat={handleDeleteChat}
                 />
               }
             />
@@ -86,6 +113,5 @@ export const App = () => {
         </Routes>
       </BrowserRouter>
     </Provider>
-    // </ThemeContext.Provider>
   );
 };
