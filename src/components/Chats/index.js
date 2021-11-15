@@ -17,6 +17,8 @@ import {
 function Chats({ chatList, messages, setMessages, onDeleteChat, onAddChat }) {
   const { chatId } = useParams();
 
+  // const messages = useSelector(state => state.messages[chatId]);
+
   const parentRef = useRef();
 
   const handleSendMessage = useCallback(

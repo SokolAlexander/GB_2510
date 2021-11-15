@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react";
-import { useSelector, useDispatch, connect } from "react-redux";
+import { useSelector, useDispatch, connect, shallowEqual } from "react-redux";
 
 import { changeName, toggleCheckbox } from "../../store/profile/actions";
 import { selectName } from "../../store/profile/selectors";
@@ -7,7 +7,7 @@ import { selectName } from "../../store/profile/selectors";
 export const Profile = ({ checkboxValue, setName, changeChecked }) => {
   // console.log(props);
   // const checkboxValue = useSelector((state) => state.checkbox);
-  const name = useSelector(selectName);
+  const name = useSelector(selectName, shallowEqual);
   const [value, setValue] = useState(name);
   // const dispatch = useDispatch();
 
