@@ -1,7 +1,7 @@
 import { Route, Routes } from "react-router";
 import { BrowserRouter, Link } from "react-router-dom";
 import { ChatList } from "../ChatList";
-import Chats from "../Chats";
+import { ConnectedChats } from "../Chats";
 import { Home } from "../Home";
 import { ConnectedProfile } from "../Profile";
 
@@ -24,7 +24,7 @@ export const Router = () => (
       <Route path="profile" element={<ConnectedProfile />} />
       <Route path="chats">
         <Route index element={<ChatList />} />
-        <Route path=":chatId" element={<Chats />} />
+        <Route path=":chatId" element={<ConnectedChats />} />
       </Route>
       <Route path="*" element={<h3>404</h3>} />
     </Routes>

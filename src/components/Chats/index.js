@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { Form } from "../Form/Form";
 import { MessageList } from "../MessageList/MessageList";
 import { AUTHORS } from "../../utils/constants";
@@ -8,24 +8,31 @@ import "./Chats.css";
 import { ChatList } from "../ChatList";
 import { Navigate, useParams } from "react-router";
 import { connect, useDispatch, useSelector } from "react-redux";
-import { selectMessages } from "../../store/messages/selectors";
+import {
+  createSelectMessagesForChat,
+  selectMessages,
+  selectMessagesForChat,
+} from "../../store/messages/selectors";
 import { addMessage } from "../../store/messages/actions";
 
-function Chats() {
+function Chats({ messages, sendMessage }) {
   const { chatId } = useParams();
 
-  const messages = useSelector(selectMessages);
-  const dispatch = useDispatch();
+  // const messages = useSelector(selectMessages);
+  // const selectMessagesForMyChat = useMemo(
+  //   () => createSelectMessagesForChat(chatId),
+  //   [chatId]
+  // );
+
+  // const messagesForCurrentChat = useSelector(selectMessagesForMyChat);
+  // const dispatch = useDispatch();
 
   const handleSendMessage = useCallback(
     (newMessage) => {
-      // setMessages((prevMessages) => ({
-      //   ...prevMessages,
-      //   [chatId]: [...prevMessages[chatId], newMessage],
-      // }));
-      dispatch(addMessage(chatId, newMessage));
+      // dispatch(addMessage(chatId, newMessage));
+      sendMessage(chatId, newMessage);
     },
-    [chatId]
+    [chatId, sendMessage]
   );
 
   useEffect(() => {
@@ -65,4 +72,15 @@ function Chats() {
 
 export default Chats;
 
-// export const ConnectedChats = connect
+const mapStateToProps = (state) => ({
+  messages: state.messages,
+});
+
+const mapDispatchToProps = {
+  sendMessage: addMessage,
+};
+
+export const ConnectedChats = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Chats);
