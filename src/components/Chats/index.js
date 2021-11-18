@@ -6,27 +6,24 @@ import { Button } from "../Button";
 
 import "./Chats.css";
 import { ChatList } from "../ChatList";
-import {
-  Navigate,
-  useLocation,
-  useNavigate,
-  useParams,
-  useRoutes,
-} from "react-router";
+import { Navigate, useParams } from "react-router";
+import { connect, useDispatch, useSelector } from "react-redux";
+import { selectMessages } from "../../store/messages/selectors";
+import { addMessage } from "../../store/messages/actions";
 
-function Chats({ chatList, messages, setMessages, onDeleteChat, onAddChat }) {
+function Chats() {
   const { chatId } = useParams();
 
-  // const messages = useSelector(state => state.messages[chatId]);
-
-  const parentRef = useRef();
+  const messages = useSelector(selectMessages);
+  const dispatch = useDispatch();
 
   const handleSendMessage = useCallback(
     (newMessage) => {
-      setMessages((prevMessages) => ({
-        ...prevMessages,
-        [chatId]: [...prevMessages[chatId], newMessage],
-      }));
+      // setMessages((prevMessages) => ({
+      //   ...prevMessages,
+      //   [chatId]: [...prevMessages[chatId], newMessage],
+      // }));
+      dispatch(addMessage(chatId, newMessage));
     },
     [chatId]
   );
@@ -55,12 +52,8 @@ function Chats({ chatList, messages, setMessages, onDeleteChat, onAddChat }) {
   }
 
   return (
-    <div className="App" ref={parentRef}>
-      <ChatList
-        chatList={chatList}
-        onAddChat={onAddChat}
-        onDeleteChat={onDeleteChat}
-      />
+    <div className="App">
+      <ChatList />
       <div>
         <Button draw={(text) => <span>{text}</span>} />
         <MessageList messages={messages[chatId]} />
@@ -71,3 +64,5 @@ function Chats({ chatList, messages, setMessages, onDeleteChat, onAddChat }) {
 }
 
 export default Chats;
+
+// export const ConnectedChats = connect
