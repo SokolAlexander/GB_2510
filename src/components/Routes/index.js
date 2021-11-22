@@ -6,6 +6,7 @@ import { ConnectedChats } from "../Chats";
 import { Home } from "../Home";
 import { PrivateRoute } from "../PrivateRoute";
 import { ConnectedProfile } from "../Profile";
+import { PrivateOutlet, PublicRoute } from "../PublicRoute";
 
 export const Router = () => (
   <BrowserRouter>
@@ -25,12 +26,35 @@ export const Router = () => (
     </ul>
 
     <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="profile" element={<ConnectedProfile />} />
+      <Route path="/" element={<PrivateOutlet />}>
+        <Route path="" element={<Home />} />
+      </Route>
+      <Route
+        path="profile"
+        element={
+          <PrivateRoute>
+            <ConnectedProfile />
+          </PrivateRoute>
+        }
+      />
       <Route path="articles" element={<Articles />} />
       <Route path="chats">
-        <Route index element={<ChatList />} />
-        <Route path=":chatId" element={<ConnectedChats />} />
+        <Route
+          index
+          element={
+            <PrivateRoute>
+              <ChatList />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path=":chatId"
+          element={
+            <PrivateRoute>
+              <ConnectedChats />
+            </PrivateRoute>
+          }
+        />
       </Route>
       <Route path="*" element={<h3>404</h3>} />
     </Routes>
