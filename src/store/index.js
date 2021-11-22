@@ -6,13 +6,14 @@ import { persistReducer, persistStore } from "redux-persist";
 import { chatsReducer } from "./chats/reducer";
 import { messagesReducer } from "./messages/reducer";
 import { profileReducer } from "./profile/reducer";
+import { articlesReducer } from "./articles/reducer";
 
 const ce = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const config = {
   key: "gbMsngr",
   storage,
-  blacklist: ["profile"],
+  blacklist: ["profile", "articles"],
 };
 
 const persistedReducer = persistReducer(
@@ -21,6 +22,7 @@ const persistedReducer = persistReducer(
     chats: chatsReducer,
     profile: profileReducer,
     messages: messagesReducer,
+    articles: articlesReducer,
   })
 );
 
