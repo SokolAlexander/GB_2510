@@ -13,7 +13,7 @@ import {
   selectMessages,
   selectMessagesForChat,
 } from "../../store/messages/selectors";
-import { addMessage } from "../../store/messages/actions";
+import { addMessageWithReply } from "../../store/messages/actions";
 
 function Chats({ messages, sendMessage }) {
   const { chatId } = useParams();
@@ -34,25 +34,6 @@ function Chats({ messages, sendMessage }) {
     },
     [chatId, sendMessage]
   );
-
-  useEffect(() => {
-    if (
-      messages[chatId]?.length &&
-      messages[chatId]?.[messages[chatId]?.length - 1].author !== AUTHORS.bot
-    ) {
-      const timeout = setTimeout(
-        () =>
-          handleSendMessage({
-            author: AUTHORS.bot,
-            text: "i am a bot",
-            id: `mes-${Date.now()}`,
-          }),
-        1500
-      );
-
-      return () => clearTimeout(timeout);
-    }
-  }, [messages]);
 
   if (!messages[chatId]) {
     return <Navigate replace to="/chats" />;
@@ -77,7 +58,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = {
-  sendMessage: addMessage,
+  sendMessage: addMessageWithReply,
 };
 
 export const ConnectedChats = connect(
