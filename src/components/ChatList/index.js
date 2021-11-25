@@ -1,15 +1,36 @@
 import { TextField, ListItem, List } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
+import { onValue, set } from "firebase/database";
+
 import { addChat } from "../../store/chats/actions";
 import { selectChats } from "../../store/chats/selectors";
 import { ChatItem } from "../ChatItem";
+import {
+  chatsRef,
+  getChatMsgsRefById,
+  getChatRefById,
+} from "../../services/firebase";
 
 export const ChatList = () => {
+  const [chats, setChats] = useState([]);
   const chatList = useSelector(selectChats);
   const dispatch = useDispatch();
   const [value, setValue] = useState("");
+
+  useEffect(() => {
+    onValue(chatsRef, (chatsSnap) => {
+      console.log(chatsSnap);
+      const newChats = [];
+
+      chatsSnap.forEach((snapshot) => {
+        newChats.push(snapshot.val());
+      });
+
+      setChats(newChats);
+    });
+  }, []);
 
   const handleChange = (e) => {
     setValue(e.target.value);
@@ -19,7 +40,9 @@ export const ChatList = () => {
     e.preventDefault();
 
     const newId = `chat${Date.now()}`;
-    dispatch(addChat({ name: value, id: newId }));
+    // dispatch(addChat({ name: value, id: newId }));
+    set(getChatMsgsRefById(newId), { empty: true });
+    set(getChatRefById(newId), { name: value, id: newId });
 
     setValue("");
   };
@@ -28,7 +51,7 @@ export const ChatList = () => {
     <div>
       <h3>List of chats</h3>
       <ul>
-        {chatList.map((chat) => (
+        {chats.map((chat) => (
           <li key={chat.id}>
             <ChatItem chat={chat} />
           </li>

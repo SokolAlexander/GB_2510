@@ -8,7 +8,7 @@ export const PublicRoute = ({ children }) => {
   return !authed ? children : <Navigate to="/chats" replace />;
 };
 
-export const PrivateOutlet = () => {
+export const PublicOutlet = () => {
   const authed = useSelector(selectAuth);
 
   return !authed ? <Outlet /> : <Navigate to="/chats" replace />;
