@@ -35,3 +35,7 @@ export const getArticles = () => async (dispatch) => {
     dispatch(getArticlesFailure(err.message));
   }
 };
+
+export const foo = () => {
+  throw new Error("newerr");
+};

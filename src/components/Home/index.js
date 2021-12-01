@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { logIn } from "../../services/firebase";
+import { Buttons } from "../Buttons";
 import { SignForm } from "../SignForm";
 
 import "./styles.css";
@@ -31,6 +32,7 @@ export const Home = () => {
       {/* <h4>HELLO {name}</h4> */}
       <SignForm onSubmit={handleSignIn} error={error} loading={loading} />
       <Link to="/signup">Sign Up</Link>
+      <Buttons />
     </>
   );
 };

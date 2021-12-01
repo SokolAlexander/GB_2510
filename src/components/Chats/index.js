@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo } from "react";
-import { Navigate, useParams } from "react-router";
+import { Navigate, useParams } from "react-router-dom";
 import { connect, useDispatch, useSelector } from "react-redux";
 import { push } from "firebase/database";
 

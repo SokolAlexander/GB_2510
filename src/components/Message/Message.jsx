@@ -1,12 +1,10 @@
 import React from "react";
 
-export const Message = ({ message, onMessageClick }) => {
-  // const message = props.message;
-  // const { message } = props;
-
+export const Message = ({ message }) => {
   return (
-    <h3 onClick={onMessageClick}>
-      {message}
-    </h3>
+    <div>
+      <span>{message.author}:</span>
+      <span>{message.text}</span>
+    </div>
   );
 };
